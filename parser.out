@@ -1,78 +1,82 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    COLON
+
 Grammar
 
 Rule 0     S' -> program
 Rule 1     program -> statements
 Rule 2     statements -> statements statement
 Rule 3     statements -> statement
-Rule 4     statement -> expression
-Rule 5     statement -> NAME ASSIGN expression
-Rule 6     statement -> function_def
-Rule 7     statement -> extern_decl
-Rule 8     statement -> RETURN expression
-Rule 9     function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
-Rule 10    block -> block statement
-Rule 11    block -> statement
-Rule 12    params -> params COMMA NAME
-Rule 13    params -> NAME
-Rule 14    params -> <empty>
-Rule 15    extern_decl -> EXTERN NAME LPAREN extern_params RPAREN
-Rule 16    extern_params -> extern_params COMMA extern_type
-Rule 17    extern_params -> extern_type
-Rule 18    extern_params -> <empty>
-Rule 19    extern_type -> NAME
-Rule 20    expression -> expression PLUS expression
-Rule 21    expression -> expression MINUS expression
-Rule 22    expression -> expression TIMES expression
-Rule 23    expression -> expression DIVIDE expression
-Rule 24    expression -> LPAREN expression RPAREN
-Rule 25    expression -> PLUS expression
-Rule 26    expression -> MINUS expression
-Rule 27    expression -> NUMBER
-Rule 28    expression -> NAME
-Rule 29    expression -> STRING
-Rule 30    expression -> function_call
-Rule 31    function_call -> NAME LPAREN args RPAREN
-Rule 32    args -> args COMMA expression
-Rule 33    args -> expression
-Rule 34    args -> <empty>
+Rule 4     statement -> expression SEMICOLON
+Rule 5     statement -> VAR NAME ASSIGN expression SEMICOLON
+Rule 6     statement -> NAME ASSIGN expression SEMICOLON
+Rule 7     statement -> function_def
+Rule 8     statement -> extern_decl
+Rule 9     statement -> RETURN expression SEMICOLON
+Rule 10    function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE
+Rule 11    params -> params COMMA NAME
+Rule 12    params -> NAME
+Rule 13    params -> <empty>
+Rule 14    extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON
+Rule 15    extern_params -> extern_params COMMA extern_type
+Rule 16    extern_params -> extern_type
+Rule 17    extern_params -> <empty>
+Rule 18    extern_type -> NAME
+Rule 19    expression -> expression PLUS expression
+Rule 20    expression -> expression MINUS expression
+Rule 21    expression -> expression TIMES expression
+Rule 22    expression -> expression DIVIDE expression
+Rule 23    expression -> LPAREN expression RPAREN
+Rule 24    expression -> PLUS expression
+Rule 25    expression -> MINUS expression
+Rule 26    expression -> NUMBER
+Rule 27    expression -> NAME
+Rule 28    expression -> STRING
+Rule 29    expression -> function_call
+Rule 30    function_call -> NAME LPAREN args RPAREN
+Rule 31    args -> args COMMA expression
+Rule 32    args -> expression
+Rule 33    args -> <empty>
 
 Terminals, with rules where they appear
 
-ASSIGN               : 5
-COLON                : 9
-COMMA                : 12 16 32
-DEF                  : 9
-DIVIDE               : 23
-EXTERN               : 15
-LBRACE               : 9
-LPAREN               : 9 15 24 31
-MINUS                : 21 26
-NAME                 : 5 9 12 13 15 19 28 31
-NUMBER               : 27
-PLUS                 : 20 25
-RBRACE               : 9
-RETURN               : 8
-RPAREN               : 9 15 24 31
-STRING               : 29
-TIMES                : 22
+ASSIGN               : 5 6
+COLON                : 
+COMMA                : 11 15 31
+DIVIDE               : 22
+EXTERN               : 14
+FN                   : 10
+LBRACE               : 10
+LPAREN               : 10 14 23 30
+MINUS                : 20 25
+NAME                 : 5 6 10 11 12 14 18 27 30
+NUMBER               : 26
+PLUS                 : 19 24
+RBRACE               : 10
+RETURN               : 9
+RPAREN               : 10 14 23 30
+SEMICOLON            : 4 5 6 9 14
+STRING               : 28
+TIMES                : 21
+VAR                  : 5
 error                : 
 
 Nonterminals, with rules where they appear
 
-args                 : 31 32
-block                : 10
-expression           : 4 5 8 20 20 21 21 22 22 23 23 24 25 26 32 33
-extern_decl          : 7
-extern_params        : 15 16
-extern_type          : 16 17
-function_call        : 30
-function_def         : 6
-params               : 9 12
+args                 : 30 31
+expression           : 4 5 6 9 19 19 20 20 21 21 22 22 23 24 25 31 32
+extern_decl          : 8
+extern_params        : 14 15
+extern_type          : 15 16
+function_call        : 29
+function_def         : 7
+params               : 10 11
 program              : 0
-statement            : 2 3 10 11
-statements           : 1 2 9
+statement            : 2 3
+statements           : 1 2 10
 
 Parsing method: LALR
 
@@ -82,43 +86,45 @@ state 0
     (1) program -> . statements
     (2) statements -> . statements statement
     (3) statements -> . statement
-    (4) statement -> . expression
-    (5) statement -> . NAME ASSIGN expression
-    (6) statement -> . function_def
-    (7) statement -> . extern_decl
-    (8) statement -> . RETURN expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (9) function_def -> . DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
-    (15) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (4) statement -> . expression SEMICOLON
+    (5) statement -> . VAR NAME ASSIGN expression SEMICOLON
+    (6) statement -> . NAME ASSIGN expression SEMICOLON
+    (7) statement -> . function_def
+    (8) statement -> . extern_decl
+    (9) statement -> . RETURN expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (10) function_def -> . FN NAME LPAREN params RPAREN LBRACE statements RBRACE
+    (14) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN SEMICOLON
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    NAME            shift and go to state 5
-    RETURN          shift and go to state 8
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    STRING          shift and go to state 13
-    DEF             shift and go to state 15
-    EXTERN          shift and go to state 16
+    VAR             shift and go to state 5
+    NAME            shift and go to state 6
+    RETURN          shift and go to state 9
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    STRING          shift and go to state 14
+    FN              shift and go to state 16
+    EXTERN          shift and go to state 17
 
     program                        shift and go to state 1
     statements                     shift and go to state 2
     statement                      shift and go to state 3
     expression                     shift and go to state 4
-    function_def                   shift and go to state 6
-    extern_decl                    shift and go to state 7
-    function_call                  shift and go to state 14
+    function_def                   shift and go to state 7
+    extern_decl                    shift and go to state 8
+    function_call                  shift and go to state 15
 
 state 1
 
@@ -130,47 +136,50 @@ state 2
 
     (1) program -> statements .
     (2) statements -> statements . statement
-    (4) statement -> . expression
-    (5) statement -> . NAME ASSIGN expression
-    (6) statement -> . function_def
-    (7) statement -> . extern_decl
-    (8) statement -> . RETURN expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (9) function_def -> . DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
-    (15) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (4) statement -> . expression SEMICOLON
+    (5) statement -> . VAR NAME ASSIGN expression SEMICOLON
+    (6) statement -> . NAME ASSIGN expression SEMICOLON
+    (7) statement -> . function_def
+    (8) statement -> . extern_decl
+    (9) statement -> . RETURN expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (10) function_def -> . FN NAME LPAREN params RPAREN LBRACE statements RBRACE
+    (14) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN SEMICOLON
+    (30) function_call -> . NAME LPAREN args RPAREN
 
     $end            reduce using rule 1 (program -> statements .)
-    NAME            shift and go to state 5
-    RETURN          shift and go to state 8
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    STRING          shift and go to state 13
-    DEF             shift and go to state 15
-    EXTERN          shift and go to state 16
+    VAR             shift and go to state 5
+    NAME            shift and go to state 6
+    RETURN          shift and go to state 9
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    STRING          shift and go to state 14
+    FN              shift and go to state 16
+    EXTERN          shift and go to state 17
 
-    statement                      shift and go to state 17
+    statement                      shift and go to state 18
     expression                     shift and go to state 4
-    function_def                   shift and go to state 6
-    extern_decl                    shift and go to state 7
-    function_call                  shift and go to state 14
+    function_def                   shift and go to state 7
+    extern_decl                    shift and go to state 8
+    function_call                  shift and go to state 15
 
 state 3
 
     (3) statements -> statement .
 
+    VAR             reduce using rule 3 (statements -> statement .)
     NAME            reduce using rule 3 (statements -> statement .)
     RETURN          reduce using rule 3 (statements -> statement .)
     LPAREN          reduce using rule 3 (statements -> statement .)
@@ -178,7 +187,7 @@ state 3
     MINUS           reduce using rule 3 (statements -> statement .)
     NUMBER          reduce using rule 3 (statements -> statement .)
     STRING          reduce using rule 3 (statements -> statement .)
-    DEF             reduce using rule 3 (statements -> statement .)
+    FN              reduce using rule 3 (statements -> statement .)
     EXTERN          reduce using rule 3 (statements -> statement .)
     $end            reduce using rule 3 (statements -> statement .)
     RBRACE          reduce using rule 3 (statements -> statement .)
@@ -186,276 +195,239 @@ state 3
 
 state 4
 
-    (4) statement -> expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (4) statement -> expression . SEMICOLON
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    NAME            reduce using rule 4 (statement -> expression .)
-    RETURN          reduce using rule 4 (statement -> expression .)
-    LPAREN          reduce using rule 4 (statement -> expression .)
-    NUMBER          reduce using rule 4 (statement -> expression .)
-    STRING          reduce using rule 4 (statement -> expression .)
-    DEF             reduce using rule 4 (statement -> expression .)
-    EXTERN          reduce using rule 4 (statement -> expression .)
-    $end            reduce using rule 4 (statement -> expression .)
-    RBRACE          reduce using rule 4 (statement -> expression .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
-
-  ! PLUS            [ reduce using rule 4 (statement -> expression .) ]
-  ! MINUS           [ reduce using rule 4 (statement -> expression .) ]
+    SEMICOLON       shift and go to state 19
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 5
 
-    (5) statement -> NAME . ASSIGN expression
-    (28) expression -> NAME .
-    (31) function_call -> NAME . LPAREN args RPAREN
+    (5) statement -> VAR . NAME ASSIGN expression SEMICOLON
 
-  ! shift/reduce conflict for LPAREN resolved as shift
-    ASSIGN          shift and go to state 22
-    PLUS            reduce using rule 28 (expression -> NAME .)
-    MINUS           reduce using rule 28 (expression -> NAME .)
-    TIMES           reduce using rule 28 (expression -> NAME .)
-    DIVIDE          reduce using rule 28 (expression -> NAME .)
-    NAME            reduce using rule 28 (expression -> NAME .)
-    RETURN          reduce using rule 28 (expression -> NAME .)
-    NUMBER          reduce using rule 28 (expression -> NAME .)
-    STRING          reduce using rule 28 (expression -> NAME .)
-    DEF             reduce using rule 28 (expression -> NAME .)
-    EXTERN          reduce using rule 28 (expression -> NAME .)
-    $end            reduce using rule 28 (expression -> NAME .)
-    RBRACE          reduce using rule 28 (expression -> NAME .)
-    LPAREN          shift and go to state 23
-
-  ! LPAREN          [ reduce using rule 28 (expression -> NAME .) ]
+    NAME            shift and go to state 24
 
 
 state 6
 
-    (6) statement -> function_def .
+    (6) statement -> NAME . ASSIGN expression SEMICOLON
+    (27) expression -> NAME .
+    (30) function_call -> NAME . LPAREN args RPAREN
 
-    NAME            reduce using rule 6 (statement -> function_def .)
-    RETURN          reduce using rule 6 (statement -> function_def .)
-    LPAREN          reduce using rule 6 (statement -> function_def .)
-    PLUS            reduce using rule 6 (statement -> function_def .)
-    MINUS           reduce using rule 6 (statement -> function_def .)
-    NUMBER          reduce using rule 6 (statement -> function_def .)
-    STRING          reduce using rule 6 (statement -> function_def .)
-    DEF             reduce using rule 6 (statement -> function_def .)
-    EXTERN          reduce using rule 6 (statement -> function_def .)
-    $end            reduce using rule 6 (statement -> function_def .)
-    RBRACE          reduce using rule 6 (statement -> function_def .)
+    ASSIGN          shift and go to state 25
+    SEMICOLON       reduce using rule 27 (expression -> NAME .)
+    PLUS            reduce using rule 27 (expression -> NAME .)
+    MINUS           reduce using rule 27 (expression -> NAME .)
+    TIMES           reduce using rule 27 (expression -> NAME .)
+    DIVIDE          reduce using rule 27 (expression -> NAME .)
+    LPAREN          shift and go to state 26
 
 
 state 7
 
-    (7) statement -> extern_decl .
+    (7) statement -> function_def .
 
-    NAME            reduce using rule 7 (statement -> extern_decl .)
-    RETURN          reduce using rule 7 (statement -> extern_decl .)
-    LPAREN          reduce using rule 7 (statement -> extern_decl .)
-    PLUS            reduce using rule 7 (statement -> extern_decl .)
-    MINUS           reduce using rule 7 (statement -> extern_decl .)
-    NUMBER          reduce using rule 7 (statement -> extern_decl .)
-    STRING          reduce using rule 7 (statement -> extern_decl .)
-    DEF             reduce using rule 7 (statement -> extern_decl .)
-    EXTERN          reduce using rule 7 (statement -> extern_decl .)
-    $end            reduce using rule 7 (statement -> extern_decl .)
-    RBRACE          reduce using rule 7 (statement -> extern_decl .)
+    VAR             reduce using rule 7 (statement -> function_def .)
+    NAME            reduce using rule 7 (statement -> function_def .)
+    RETURN          reduce using rule 7 (statement -> function_def .)
+    LPAREN          reduce using rule 7 (statement -> function_def .)
+    PLUS            reduce using rule 7 (statement -> function_def .)
+    MINUS           reduce using rule 7 (statement -> function_def .)
+    NUMBER          reduce using rule 7 (statement -> function_def .)
+    STRING          reduce using rule 7 (statement -> function_def .)
+    FN              reduce using rule 7 (statement -> function_def .)
+    EXTERN          reduce using rule 7 (statement -> function_def .)
+    $end            reduce using rule 7 (statement -> function_def .)
+    RBRACE          reduce using rule 7 (statement -> function_def .)
 
 
 state 8
 
-    (8) statement -> RETURN . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (8) statement -> extern_decl .
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    VAR             reduce using rule 8 (statement -> extern_decl .)
+    NAME            reduce using rule 8 (statement -> extern_decl .)
+    RETURN          reduce using rule 8 (statement -> extern_decl .)
+    LPAREN          reduce using rule 8 (statement -> extern_decl .)
+    PLUS            reduce using rule 8 (statement -> extern_decl .)
+    MINUS           reduce using rule 8 (statement -> extern_decl .)
+    NUMBER          reduce using rule 8 (statement -> extern_decl .)
+    STRING          reduce using rule 8 (statement -> extern_decl .)
+    FN              reduce using rule 8 (statement -> extern_decl .)
+    EXTERN          reduce using rule 8 (statement -> extern_decl .)
+    $end            reduce using rule 8 (statement -> extern_decl .)
+    RBRACE          reduce using rule 8 (statement -> extern_decl .)
 
-    expression                     shift and go to state 24
-    function_call                  shift and go to state 14
 
 state 9
 
-    (25) expression -> PLUS . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (9) statement -> RETURN . expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    expression                     shift and go to state 26
-    function_call                  shift and go to state 14
+    expression                     shift and go to state 27
+    function_call                  shift and go to state 15
 
 state 10
 
-    (26) expression -> MINUS . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (24) expression -> PLUS . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    expression                     shift and go to state 27
-    function_call                  shift and go to state 14
+    expression                     shift and go to state 29
+    function_call                  shift and go to state 15
 
 state 11
 
-    (24) expression -> LPAREN . expression RPAREN
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (25) expression -> MINUS . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    expression                     shift and go to state 28
-    function_call                  shift and go to state 14
+    expression                     shift and go to state 30
+    function_call                  shift and go to state 15
 
 state 12
 
-    (27) expression -> NUMBER .
+    (23) expression -> LPAREN . expression RPAREN
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    PLUS            reduce using rule 27 (expression -> NUMBER .)
-    MINUS           reduce using rule 27 (expression -> NUMBER .)
-    TIMES           reduce using rule 27 (expression -> NUMBER .)
-    DIVIDE          reduce using rule 27 (expression -> NUMBER .)
-    NAME            reduce using rule 27 (expression -> NUMBER .)
-    RETURN          reduce using rule 27 (expression -> NUMBER .)
-    LPAREN          reduce using rule 27 (expression -> NUMBER .)
-    NUMBER          reduce using rule 27 (expression -> NUMBER .)
-    STRING          reduce using rule 27 (expression -> NUMBER .)
-    DEF             reduce using rule 27 (expression -> NUMBER .)
-    EXTERN          reduce using rule 27 (expression -> NUMBER .)
-    $end            reduce using rule 27 (expression -> NUMBER .)
-    RBRACE          reduce using rule 27 (expression -> NUMBER .)
-    RPAREN          reduce using rule 27 (expression -> NUMBER .)
-    COMMA           reduce using rule 27 (expression -> NUMBER .)
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
+    expression                     shift and go to state 31
+    function_call                  shift and go to state 15
 
 state 13
 
-    (29) expression -> STRING .
+    (26) expression -> NUMBER .
 
-    PLUS            reduce using rule 29 (expression -> STRING .)
-    MINUS           reduce using rule 29 (expression -> STRING .)
-    TIMES           reduce using rule 29 (expression -> STRING .)
-    DIVIDE          reduce using rule 29 (expression -> STRING .)
-    NAME            reduce using rule 29 (expression -> STRING .)
-    RETURN          reduce using rule 29 (expression -> STRING .)
-    LPAREN          reduce using rule 29 (expression -> STRING .)
-    NUMBER          reduce using rule 29 (expression -> STRING .)
-    STRING          reduce using rule 29 (expression -> STRING .)
-    DEF             reduce using rule 29 (expression -> STRING .)
-    EXTERN          reduce using rule 29 (expression -> STRING .)
-    $end            reduce using rule 29 (expression -> STRING .)
-    RBRACE          reduce using rule 29 (expression -> STRING .)
-    RPAREN          reduce using rule 29 (expression -> STRING .)
-    COMMA           reduce using rule 29 (expression -> STRING .)
+    SEMICOLON       reduce using rule 26 (expression -> NUMBER .)
+    PLUS            reduce using rule 26 (expression -> NUMBER .)
+    MINUS           reduce using rule 26 (expression -> NUMBER .)
+    TIMES           reduce using rule 26 (expression -> NUMBER .)
+    DIVIDE          reduce using rule 26 (expression -> NUMBER .)
+    RPAREN          reduce using rule 26 (expression -> NUMBER .)
+    COMMA           reduce using rule 26 (expression -> NUMBER .)
 
 
 state 14
 
-    (30) expression -> function_call .
+    (28) expression -> STRING .
 
-    PLUS            reduce using rule 30 (expression -> function_call .)
-    MINUS           reduce using rule 30 (expression -> function_call .)
-    TIMES           reduce using rule 30 (expression -> function_call .)
-    DIVIDE          reduce using rule 30 (expression -> function_call .)
-    NAME            reduce using rule 30 (expression -> function_call .)
-    RETURN          reduce using rule 30 (expression -> function_call .)
-    LPAREN          reduce using rule 30 (expression -> function_call .)
-    NUMBER          reduce using rule 30 (expression -> function_call .)
-    STRING          reduce using rule 30 (expression -> function_call .)
-    DEF             reduce using rule 30 (expression -> function_call .)
-    EXTERN          reduce using rule 30 (expression -> function_call .)
-    $end            reduce using rule 30 (expression -> function_call .)
-    RBRACE          reduce using rule 30 (expression -> function_call .)
-    RPAREN          reduce using rule 30 (expression -> function_call .)
-    COMMA           reduce using rule 30 (expression -> function_call .)
+    SEMICOLON       reduce using rule 28 (expression -> STRING .)
+    PLUS            reduce using rule 28 (expression -> STRING .)
+    MINUS           reduce using rule 28 (expression -> STRING .)
+    TIMES           reduce using rule 28 (expression -> STRING .)
+    DIVIDE          reduce using rule 28 (expression -> STRING .)
+    RPAREN          reduce using rule 28 (expression -> STRING .)
+    COMMA           reduce using rule 28 (expression -> STRING .)
 
 
 state 15
 
-    (9) function_def -> DEF . NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
+    (29) expression -> function_call .
 
-    NAME            shift and go to state 29
+    SEMICOLON       reduce using rule 29 (expression -> function_call .)
+    PLUS            reduce using rule 29 (expression -> function_call .)
+    MINUS           reduce using rule 29 (expression -> function_call .)
+    TIMES           reduce using rule 29 (expression -> function_call .)
+    DIVIDE          reduce using rule 29 (expression -> function_call .)
+    RPAREN          reduce using rule 29 (expression -> function_call .)
+    COMMA           reduce using rule 29 (expression -> function_call .)
 
 
 state 16
 
-    (15) extern_decl -> EXTERN . NAME LPAREN extern_params RPAREN
+    (10) function_def -> FN . NAME LPAREN params RPAREN LBRACE statements RBRACE
 
-    NAME            shift and go to state 30
+    NAME            shift and go to state 32
 
 
 state 17
 
+    (14) extern_decl -> EXTERN . NAME LPAREN extern_params RPAREN SEMICOLON
+
+    NAME            shift and go to state 33
+
+
+state 18
+
     (2) statements -> statements statement .
 
+    VAR             reduce using rule 2 (statements -> statements statement .)
     NAME            reduce using rule 2 (statements -> statements statement .)
     RETURN          reduce using rule 2 (statements -> statements statement .)
     LPAREN          reduce using rule 2 (statements -> statements statement .)
@@ -463,813 +435,828 @@ state 17
     MINUS           reduce using rule 2 (statements -> statements statement .)
     NUMBER          reduce using rule 2 (statements -> statements statement .)
     STRING          reduce using rule 2 (statements -> statements statement .)
-    DEF             reduce using rule 2 (statements -> statements statement .)
+    FN              reduce using rule 2 (statements -> statements statement .)
     EXTERN          reduce using rule 2 (statements -> statements statement .)
     $end            reduce using rule 2 (statements -> statements statement .)
     RBRACE          reduce using rule 2 (statements -> statements statement .)
 
 
-state 18
-
-    (20) expression -> expression PLUS . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
-
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
-
-    expression                     shift and go to state 31
-    function_call                  shift and go to state 14
-
 state 19
 
-    (21) expression -> expression MINUS . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (4) statement -> expression SEMICOLON .
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    VAR             reduce using rule 4 (statement -> expression SEMICOLON .)
+    NAME            reduce using rule 4 (statement -> expression SEMICOLON .)
+    RETURN          reduce using rule 4 (statement -> expression SEMICOLON .)
+    LPAREN          reduce using rule 4 (statement -> expression SEMICOLON .)
+    PLUS            reduce using rule 4 (statement -> expression SEMICOLON .)
+    MINUS           reduce using rule 4 (statement -> expression SEMICOLON .)
+    NUMBER          reduce using rule 4 (statement -> expression SEMICOLON .)
+    STRING          reduce using rule 4 (statement -> expression SEMICOLON .)
+    FN              reduce using rule 4 (statement -> expression SEMICOLON .)
+    EXTERN          reduce using rule 4 (statement -> expression SEMICOLON .)
+    $end            reduce using rule 4 (statement -> expression SEMICOLON .)
+    RBRACE          reduce using rule 4 (statement -> expression SEMICOLON .)
 
-    expression                     shift and go to state 32
-    function_call                  shift and go to state 14
 
 state 20
 
-    (22) expression -> expression TIMES . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (19) expression -> expression PLUS . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    expression                     shift and go to state 33
-    function_call                  shift and go to state 14
+    expression                     shift and go to state 34
+    function_call                  shift and go to state 15
 
 state 21
 
-    (23) expression -> expression DIVIDE . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (20) expression -> expression MINUS . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    expression                     shift and go to state 34
-    function_call                  shift and go to state 14
+    expression                     shift and go to state 35
+    function_call                  shift and go to state 15
 
 state 22
 
-    (5) statement -> NAME ASSIGN . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (21) expression -> expression TIMES . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    expression                     shift and go to state 35
-    function_call                  shift and go to state 14
+    expression                     shift and go to state 36
+    function_call                  shift and go to state 15
 
 state 23
 
-    (31) function_call -> NAME LPAREN . args RPAREN
-    (32) args -> . args COMMA expression
-    (33) args -> . expression
-    (34) args -> .
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (22) expression -> expression DIVIDE . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    RPAREN          reduce using rule 34 (args -> .)
-    COMMA           reduce using rule 34 (args -> .)
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-    args                           shift and go to state 36
     expression                     shift and go to state 37
-    function_call                  shift and go to state 14
+    function_call                  shift and go to state 15
 
 state 24
 
-    (8) statement -> RETURN expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (5) statement -> VAR NAME . ASSIGN expression SEMICOLON
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    NAME            reduce using rule 8 (statement -> RETURN expression .)
-    RETURN          reduce using rule 8 (statement -> RETURN expression .)
-    LPAREN          reduce using rule 8 (statement -> RETURN expression .)
-    NUMBER          reduce using rule 8 (statement -> RETURN expression .)
-    STRING          reduce using rule 8 (statement -> RETURN expression .)
-    DEF             reduce using rule 8 (statement -> RETURN expression .)
-    EXTERN          reduce using rule 8 (statement -> RETURN expression .)
-    $end            reduce using rule 8 (statement -> RETURN expression .)
-    RBRACE          reduce using rule 8 (statement -> RETURN expression .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
-
-  ! PLUS            [ reduce using rule 8 (statement -> RETURN expression .) ]
-  ! MINUS           [ reduce using rule 8 (statement -> RETURN expression .) ]
+    ASSIGN          shift and go to state 38
 
 
 state 25
 
-    (28) expression -> NAME .
-    (31) function_call -> NAME . LPAREN args RPAREN
+    (6) statement -> NAME ASSIGN . expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-  ! shift/reduce conflict for LPAREN resolved as shift
-    PLUS            reduce using rule 28 (expression -> NAME .)
-    MINUS           reduce using rule 28 (expression -> NAME .)
-    TIMES           reduce using rule 28 (expression -> NAME .)
-    DIVIDE          reduce using rule 28 (expression -> NAME .)
-    NAME            reduce using rule 28 (expression -> NAME .)
-    RETURN          reduce using rule 28 (expression -> NAME .)
-    NUMBER          reduce using rule 28 (expression -> NAME .)
-    STRING          reduce using rule 28 (expression -> NAME .)
-    DEF             reduce using rule 28 (expression -> NAME .)
-    EXTERN          reduce using rule 28 (expression -> NAME .)
-    $end            reduce using rule 28 (expression -> NAME .)
-    RBRACE          reduce using rule 28 (expression -> NAME .)
-    RPAREN          reduce using rule 28 (expression -> NAME .)
-    COMMA           reduce using rule 28 (expression -> NAME .)
-    LPAREN          shift and go to state 23
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-  ! LPAREN          [ reduce using rule 28 (expression -> NAME .) ]
-
+    expression                     shift and go to state 39
+    function_call                  shift and go to state 15
 
 state 26
 
-    (25) expression -> PLUS expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (30) function_call -> NAME LPAREN . args RPAREN
+    (31) args -> . args COMMA expression
+    (32) args -> . expression
+    (33) args -> .
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    PLUS            reduce using rule 25 (expression -> PLUS expression .)
-    MINUS           reduce using rule 25 (expression -> PLUS expression .)
-    TIMES           reduce using rule 25 (expression -> PLUS expression .)
-    DIVIDE          reduce using rule 25 (expression -> PLUS expression .)
-    NAME            reduce using rule 25 (expression -> PLUS expression .)
-    RETURN          reduce using rule 25 (expression -> PLUS expression .)
-    LPAREN          reduce using rule 25 (expression -> PLUS expression .)
-    NUMBER          reduce using rule 25 (expression -> PLUS expression .)
-    STRING          reduce using rule 25 (expression -> PLUS expression .)
-    DEF             reduce using rule 25 (expression -> PLUS expression .)
-    EXTERN          reduce using rule 25 (expression -> PLUS expression .)
-    $end            reduce using rule 25 (expression -> PLUS expression .)
-    RBRACE          reduce using rule 25 (expression -> PLUS expression .)
-    RPAREN          reduce using rule 25 (expression -> PLUS expression .)
-    COMMA           reduce using rule 25 (expression -> PLUS expression .)
+    RPAREN          reduce using rule 33 (args -> .)
+    COMMA           reduce using rule 33 (args -> .)
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
-  ! TIMES           [ shift and go to state 20 ]
-  ! DIVIDE          [ shift and go to state 21 ]
-
+    args                           shift and go to state 40
+    expression                     shift and go to state 41
+    function_call                  shift and go to state 15
 
 state 27
 
-    (26) expression -> MINUS expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (9) statement -> RETURN expression . SEMICOLON
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    PLUS            reduce using rule 26 (expression -> MINUS expression .)
-    MINUS           reduce using rule 26 (expression -> MINUS expression .)
-    TIMES           reduce using rule 26 (expression -> MINUS expression .)
-    DIVIDE          reduce using rule 26 (expression -> MINUS expression .)
-    NAME            reduce using rule 26 (expression -> MINUS expression .)
-    RETURN          reduce using rule 26 (expression -> MINUS expression .)
-    LPAREN          reduce using rule 26 (expression -> MINUS expression .)
-    NUMBER          reduce using rule 26 (expression -> MINUS expression .)
-    STRING          reduce using rule 26 (expression -> MINUS expression .)
-    DEF             reduce using rule 26 (expression -> MINUS expression .)
-    EXTERN          reduce using rule 26 (expression -> MINUS expression .)
-    $end            reduce using rule 26 (expression -> MINUS expression .)
-    RBRACE          reduce using rule 26 (expression -> MINUS expression .)
-    RPAREN          reduce using rule 26 (expression -> MINUS expression .)
-    COMMA           reduce using rule 26 (expression -> MINUS expression .)
-
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
-  ! TIMES           [ shift and go to state 20 ]
-  ! DIVIDE          [ shift and go to state 21 ]
+    SEMICOLON       shift and go to state 42
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 28
 
-    (24) expression -> LPAREN expression . RPAREN
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (27) expression -> NAME .
+    (30) function_call -> NAME . LPAREN args RPAREN
 
-    RPAREN          shift and go to state 38
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
+    SEMICOLON       reduce using rule 27 (expression -> NAME .)
+    PLUS            reduce using rule 27 (expression -> NAME .)
+    MINUS           reduce using rule 27 (expression -> NAME .)
+    TIMES           reduce using rule 27 (expression -> NAME .)
+    DIVIDE          reduce using rule 27 (expression -> NAME .)
+    RPAREN          reduce using rule 27 (expression -> NAME .)
+    COMMA           reduce using rule 27 (expression -> NAME .)
+    LPAREN          shift and go to state 26
 
 
 state 29
 
-    (9) function_def -> DEF NAME . LPAREN params RPAREN COLON LBRACE statements RBRACE
+    (24) expression -> PLUS expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    LPAREN          shift and go to state 39
+    SEMICOLON       reduce using rule 24 (expression -> PLUS expression .)
+    PLUS            reduce using rule 24 (expression -> PLUS expression .)
+    MINUS           reduce using rule 24 (expression -> PLUS expression .)
+    TIMES           reduce using rule 24 (expression -> PLUS expression .)
+    DIVIDE          reduce using rule 24 (expression -> PLUS expression .)
+    RPAREN          reduce using rule 24 (expression -> PLUS expression .)
+    COMMA           reduce using rule 24 (expression -> PLUS expression .)
+
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
+  ! TIMES           [ shift and go to state 22 ]
+  ! DIVIDE          [ shift and go to state 23 ]
 
 
 state 30
 
-    (15) extern_decl -> EXTERN NAME . LPAREN extern_params RPAREN
+    (25) expression -> MINUS expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    LPAREN          shift and go to state 40
+    SEMICOLON       reduce using rule 25 (expression -> MINUS expression .)
+    PLUS            reduce using rule 25 (expression -> MINUS expression .)
+    MINUS           reduce using rule 25 (expression -> MINUS expression .)
+    TIMES           reduce using rule 25 (expression -> MINUS expression .)
+    DIVIDE          reduce using rule 25 (expression -> MINUS expression .)
+    RPAREN          reduce using rule 25 (expression -> MINUS expression .)
+    COMMA           reduce using rule 25 (expression -> MINUS expression .)
+
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
+  ! TIMES           [ shift and go to state 22 ]
+  ! DIVIDE          [ shift and go to state 23 ]
 
 
 state 31
 
-    (20) expression -> expression PLUS expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (23) expression -> LPAREN expression . RPAREN
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    PLUS            reduce using rule 20 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 20 (expression -> expression PLUS expression .)
-    NAME            reduce using rule 20 (expression -> expression PLUS expression .)
-    RETURN          reduce using rule 20 (expression -> expression PLUS expression .)
-    LPAREN          reduce using rule 20 (expression -> expression PLUS expression .)
-    NUMBER          reduce using rule 20 (expression -> expression PLUS expression .)
-    STRING          reduce using rule 20 (expression -> expression PLUS expression .)
-    DEF             reduce using rule 20 (expression -> expression PLUS expression .)
-    EXTERN          reduce using rule 20 (expression -> expression PLUS expression .)
-    $end            reduce using rule 20 (expression -> expression PLUS expression .)
-    RBRACE          reduce using rule 20 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 20 (expression -> expression PLUS expression .)
-    COMMA           reduce using rule 20 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
-
-  ! TIMES           [ reduce using rule 20 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 20 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
+    RPAREN          shift and go to state 43
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 32
 
-    (21) expression -> expression MINUS expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (10) function_def -> FN NAME . LPAREN params RPAREN LBRACE statements RBRACE
 
-    PLUS            reduce using rule 21 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 21 (expression -> expression MINUS expression .)
-    NAME            reduce using rule 21 (expression -> expression MINUS expression .)
-    RETURN          reduce using rule 21 (expression -> expression MINUS expression .)
-    LPAREN          reduce using rule 21 (expression -> expression MINUS expression .)
-    NUMBER          reduce using rule 21 (expression -> expression MINUS expression .)
-    STRING          reduce using rule 21 (expression -> expression MINUS expression .)
-    DEF             reduce using rule 21 (expression -> expression MINUS expression .)
-    EXTERN          reduce using rule 21 (expression -> expression MINUS expression .)
-    $end            reduce using rule 21 (expression -> expression MINUS expression .)
-    RBRACE          reduce using rule 21 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 21 (expression -> expression MINUS expression .)
-    COMMA           reduce using rule 21 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
-
-  ! TIMES           [ reduce using rule 21 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 21 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
+    LPAREN          shift and go to state 44
 
 
 state 33
 
-    (22) expression -> expression TIMES expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (14) extern_decl -> EXTERN NAME . LPAREN extern_params RPAREN SEMICOLON
 
-    PLUS            reduce using rule 22 (expression -> expression TIMES expression .)
-    MINUS           reduce using rule 22 (expression -> expression TIMES expression .)
-    TIMES           reduce using rule 22 (expression -> expression TIMES expression .)
-    DIVIDE          reduce using rule 22 (expression -> expression TIMES expression .)
-    NAME            reduce using rule 22 (expression -> expression TIMES expression .)
-    RETURN          reduce using rule 22 (expression -> expression TIMES expression .)
-    LPAREN          reduce using rule 22 (expression -> expression TIMES expression .)
-    NUMBER          reduce using rule 22 (expression -> expression TIMES expression .)
-    STRING          reduce using rule 22 (expression -> expression TIMES expression .)
-    DEF             reduce using rule 22 (expression -> expression TIMES expression .)
-    EXTERN          reduce using rule 22 (expression -> expression TIMES expression .)
-    $end            reduce using rule 22 (expression -> expression TIMES expression .)
-    RBRACE          reduce using rule 22 (expression -> expression TIMES expression .)
-    RPAREN          reduce using rule 22 (expression -> expression TIMES expression .)
-    COMMA           reduce using rule 22 (expression -> expression TIMES expression .)
-
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
-  ! TIMES           [ shift and go to state 20 ]
-  ! DIVIDE          [ shift and go to state 21 ]
+    LPAREN          shift and go to state 45
 
 
 state 34
 
-    (23) expression -> expression DIVIDE expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (19) expression -> expression PLUS expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    PLUS            reduce using rule 23 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 23 (expression -> expression DIVIDE expression .)
-    TIMES           reduce using rule 23 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    NAME            reduce using rule 23 (expression -> expression DIVIDE expression .)
-    RETURN          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    LPAREN          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    NUMBER          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    STRING          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    DEF             reduce using rule 23 (expression -> expression DIVIDE expression .)
-    EXTERN          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    $end            reduce using rule 23 (expression -> expression DIVIDE expression .)
-    RBRACE          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 23 (expression -> expression DIVIDE expression .)
-    COMMA           reduce using rule 23 (expression -> expression DIVIDE expression .)
+    SEMICOLON       reduce using rule 19 (expression -> expression PLUS expression .)
+    PLUS            reduce using rule 19 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 19 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 19 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 19 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
-  ! TIMES           [ shift and go to state 20 ]
-  ! DIVIDE          [ shift and go to state 21 ]
+  ! TIMES           [ reduce using rule 19 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 19 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
 
 
 state 35
 
-    (5) statement -> NAME ASSIGN expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (20) expression -> expression MINUS expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    NAME            reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    RETURN          reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    LPAREN          reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    NUMBER          reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    STRING          reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    DEF             reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    EXTERN          reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    $end            reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    RBRACE          reduce using rule 5 (statement -> NAME ASSIGN expression .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
+    SEMICOLON       reduce using rule 20 (expression -> expression MINUS expression .)
+    PLUS            reduce using rule 20 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 20 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 20 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 20 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
-  ! PLUS            [ reduce using rule 5 (statement -> NAME ASSIGN expression .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> NAME ASSIGN expression .) ]
+  ! TIMES           [ reduce using rule 20 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 20 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
 
 
 state 36
 
-    (31) function_call -> NAME LPAREN args . RPAREN
-    (32) args -> args . COMMA expression
+    (21) expression -> expression TIMES expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    RPAREN          shift and go to state 41
-    COMMA           shift and go to state 42
+    SEMICOLON       reduce using rule 21 (expression -> expression TIMES expression .)
+    PLUS            reduce using rule 21 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 21 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 21 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 21 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 21 (expression -> expression TIMES expression .)
+    COMMA           reduce using rule 21 (expression -> expression TIMES expression .)
+
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
+  ! TIMES           [ shift and go to state 22 ]
+  ! DIVIDE          [ shift and go to state 23 ]
 
 
 state 37
 
-    (33) args -> expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (22) expression -> expression DIVIDE expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    RPAREN          reduce using rule 33 (args -> expression .)
-    COMMA           reduce using rule 33 (args -> expression .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
+    SEMICOLON       reduce using rule 22 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 22 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 22 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 22 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 22 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 22 (expression -> expression DIVIDE expression .)
+    COMMA           reduce using rule 22 (expression -> expression DIVIDE expression .)
+
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
+  ! TIMES           [ shift and go to state 22 ]
+  ! DIVIDE          [ shift and go to state 23 ]
 
 
 state 38
 
-    (24) expression -> LPAREN expression RPAREN .
+    (5) statement -> VAR NAME ASSIGN . expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    PLUS            reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    NAME            reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    RETURN          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    LPAREN          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    STRING          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    DEF             reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    EXTERN          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    $end            reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    RBRACE          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 24 (expression -> LPAREN expression RPAREN .)
-    COMMA           reduce using rule 24 (expression -> LPAREN expression RPAREN .)
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
+    expression                     shift and go to state 46
+    function_call                  shift and go to state 15
 
 state 39
 
-    (9) function_def -> DEF NAME LPAREN . params RPAREN COLON LBRACE statements RBRACE
-    (12) params -> . params COMMA NAME
-    (13) params -> . NAME
-    (14) params -> .
+    (6) statement -> NAME ASSIGN expression . SEMICOLON
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    NAME            shift and go to state 43
-    RPAREN          reduce using rule 14 (params -> .)
-    COMMA           reduce using rule 14 (params -> .)
+    SEMICOLON       shift and go to state 47
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
-    params                         shift and go to state 44
 
 state 40
 
-    (15) extern_decl -> EXTERN NAME LPAREN . extern_params RPAREN
-    (16) extern_params -> . extern_params COMMA extern_type
-    (17) extern_params -> . extern_type
-    (18) extern_params -> .
-    (19) extern_type -> . NAME
+    (30) function_call -> NAME LPAREN args . RPAREN
+    (31) args -> args . COMMA expression
 
-    RPAREN          reduce using rule 18 (extern_params -> .)
-    COMMA           reduce using rule 18 (extern_params -> .)
-    NAME            shift and go to state 45
+    RPAREN          shift and go to state 48
+    COMMA           shift and go to state 49
 
-    extern_params                  shift and go to state 46
-    extern_type                    shift and go to state 47
 
 state 41
 
-    (31) function_call -> NAME LPAREN args RPAREN .
+    (32) args -> expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    PLUS            reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    MINUS           reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    TIMES           reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    DIVIDE          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    NAME            reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    RETURN          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    LPAREN          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    NUMBER          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    STRING          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    DEF             reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    EXTERN          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    $end            reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    RBRACE          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    RPAREN          reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
-    COMMA           reduce using rule 31 (function_call -> NAME LPAREN args RPAREN .)
+    RPAREN          reduce using rule 32 (args -> expression .)
+    COMMA           reduce using rule 32 (args -> expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 42
 
-    (32) args -> args COMMA . expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (9) statement -> RETURN expression SEMICOLON .
 
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    NAME            shift and go to state 25
-    STRING          shift and go to state 13
+    VAR             reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    NAME            reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    RETURN          reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    LPAREN          reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    PLUS            reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    MINUS           reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    NUMBER          reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    STRING          reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    FN              reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    EXTERN          reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    $end            reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
+    RBRACE          reduce using rule 9 (statement -> RETURN expression SEMICOLON .)
 
-    expression                     shift and go to state 48
-    function_call                  shift and go to state 14
 
 state 43
 
-    (13) params -> NAME .
+    (23) expression -> LPAREN expression RPAREN .
 
-    RPAREN          reduce using rule 13 (params -> NAME .)
-    COMMA           reduce using rule 13 (params -> NAME .)
+    SEMICOLON       reduce using rule 23 (expression -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 23 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 23 (expression -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 23 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 23 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 23 (expression -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 23 (expression -> LPAREN expression RPAREN .)
 
 
 state 44
 
-    (9) function_def -> DEF NAME LPAREN params . RPAREN COLON LBRACE statements RBRACE
-    (12) params -> params . COMMA NAME
+    (10) function_def -> FN NAME LPAREN . params RPAREN LBRACE statements RBRACE
+    (11) params -> . params COMMA NAME
+    (12) params -> . NAME
+    (13) params -> .
 
-    RPAREN          shift and go to state 49
-    COMMA           shift and go to state 50
+    NAME            shift and go to state 50
+    RPAREN          reduce using rule 13 (params -> .)
+    COMMA           reduce using rule 13 (params -> .)
 
+    params                         shift and go to state 51
 
 state 45
 
-    (19) extern_type -> NAME .
+    (14) extern_decl -> EXTERN NAME LPAREN . extern_params RPAREN SEMICOLON
+    (15) extern_params -> . extern_params COMMA extern_type
+    (16) extern_params -> . extern_type
+    (17) extern_params -> .
+    (18) extern_type -> . NAME
 
-    RPAREN          reduce using rule 19 (extern_type -> NAME .)
-    COMMA           reduce using rule 19 (extern_type -> NAME .)
+    RPAREN          reduce using rule 17 (extern_params -> .)
+    COMMA           reduce using rule 17 (extern_params -> .)
+    NAME            shift and go to state 52
 
+    extern_params                  shift and go to state 53
+    extern_type                    shift and go to state 54
 
 state 46
 
-    (15) extern_decl -> EXTERN NAME LPAREN extern_params . RPAREN
-    (16) extern_params -> extern_params . COMMA extern_type
+    (5) statement -> VAR NAME ASSIGN expression . SEMICOLON
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    RPAREN          shift and go to state 51
-    COMMA           shift and go to state 52
+    SEMICOLON       shift and go to state 55
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 47
 
-    (17) extern_params -> extern_type .
+    (6) statement -> NAME ASSIGN expression SEMICOLON .
 
-    RPAREN          reduce using rule 17 (extern_params -> extern_type .)
-    COMMA           reduce using rule 17 (extern_params -> extern_type .)
+    VAR             reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    NAME            reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    PLUS            reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    MINUS           reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    NUMBER          reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    STRING          reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    FN              reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    EXTERN          reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    $end            reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
+    RBRACE          reduce using rule 6 (statement -> NAME ASSIGN expression SEMICOLON .)
 
 
 state 48
 
-    (32) args -> args COMMA expression .
-    (20) expression -> expression . PLUS expression
-    (21) expression -> expression . MINUS expression
-    (22) expression -> expression . TIMES expression
-    (23) expression -> expression . DIVIDE expression
+    (30) function_call -> NAME LPAREN args RPAREN .
 
-    RPAREN          reduce using rule 32 (args -> args COMMA expression .)
-    COMMA           reduce using rule 32 (args -> args COMMA expression .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    TIMES           shift and go to state 20
-    DIVIDE          shift and go to state 21
+    SEMICOLON       reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
+    PLUS            reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
+    MINUS           reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
+    TIMES           reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
+    DIVIDE          reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
+    RPAREN          reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
+    COMMA           reduce using rule 30 (function_call -> NAME LPAREN args RPAREN .)
 
 
 state 49
 
-    (9) function_def -> DEF NAME LPAREN params RPAREN . COLON LBRACE statements RBRACE
+    (31) args -> args COMMA . expression
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (30) function_call -> . NAME LPAREN args RPAREN
 
-    COLON           shift and go to state 53
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    NAME            shift and go to state 28
+    STRING          shift and go to state 14
 
+    expression                     shift and go to state 56
+    function_call                  shift and go to state 15
 
 state 50
 
-    (12) params -> params COMMA . NAME
+    (12) params -> NAME .
 
-    NAME            shift and go to state 54
+    RPAREN          reduce using rule 12 (params -> NAME .)
+    COMMA           reduce using rule 12 (params -> NAME .)
 
 
 state 51
 
-    (15) extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .
+    (10) function_def -> FN NAME LPAREN params . RPAREN LBRACE statements RBRACE
+    (11) params -> params . COMMA NAME
 
-    NAME            reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    RETURN          reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    LPAREN          reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    PLUS            reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    MINUS           reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    NUMBER          reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    STRING          reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    DEF             reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    EXTERN          reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    $end            reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
-    RBRACE          reduce using rule 15 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN .)
+    RPAREN          shift and go to state 57
+    COMMA           shift and go to state 58
 
 
 state 52
 
-    (16) extern_params -> extern_params COMMA . extern_type
-    (19) extern_type -> . NAME
+    (18) extern_type -> NAME .
 
-    NAME            shift and go to state 45
+    RPAREN          reduce using rule 18 (extern_type -> NAME .)
+    COMMA           reduce using rule 18 (extern_type -> NAME .)
 
-    extern_type                    shift and go to state 55
 
 state 53
 
-    (9) function_def -> DEF NAME LPAREN params RPAREN COLON . LBRACE statements RBRACE
+    (14) extern_decl -> EXTERN NAME LPAREN extern_params . RPAREN SEMICOLON
+    (15) extern_params -> extern_params . COMMA extern_type
 
-    LBRACE          shift and go to state 56
+    RPAREN          shift and go to state 59
+    COMMA           shift and go to state 60
 
 
 state 54
 
-    (12) params -> params COMMA NAME .
+    (16) extern_params -> extern_type .
 
-    RPAREN          reduce using rule 12 (params -> params COMMA NAME .)
-    COMMA           reduce using rule 12 (params -> params COMMA NAME .)
+    RPAREN          reduce using rule 16 (extern_params -> extern_type .)
+    COMMA           reduce using rule 16 (extern_params -> extern_type .)
 
 
 state 55
 
-    (16) extern_params -> extern_params COMMA extern_type .
+    (5) statement -> VAR NAME ASSIGN expression SEMICOLON .
 
-    RPAREN          reduce using rule 16 (extern_params -> extern_params COMMA extern_type .)
-    COMMA           reduce using rule 16 (extern_params -> extern_params COMMA extern_type .)
+    VAR             reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    NAME            reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    PLUS            reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    MINUS           reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    NUMBER          reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    STRING          reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    FN              reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    EXTERN          reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    $end            reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
+    RBRACE          reduce using rule 5 (statement -> VAR NAME ASSIGN expression SEMICOLON .)
 
 
 state 56
 
-    (9) function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE . statements RBRACE
-    (2) statements -> . statements statement
-    (3) statements -> . statement
-    (4) statement -> . expression
-    (5) statement -> . NAME ASSIGN expression
-    (6) statement -> . function_def
-    (7) statement -> . extern_decl
-    (8) statement -> . RETURN expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (9) function_def -> . DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
-    (15) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (31) args -> args COMMA expression .
+    (19) expression -> expression . PLUS expression
+    (20) expression -> expression . MINUS expression
+    (21) expression -> expression . TIMES expression
+    (22) expression -> expression . DIVIDE expression
 
-    NAME            shift and go to state 5
-    RETURN          shift and go to state 8
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    STRING          shift and go to state 13
-    DEF             shift and go to state 15
-    EXTERN          shift and go to state 16
+    RPAREN          reduce using rule 31 (args -> args COMMA expression .)
+    COMMA           reduce using rule 31 (args -> args COMMA expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
-    statements                     shift and go to state 57
-    statement                      shift and go to state 3
-    expression                     shift and go to state 4
-    function_def                   shift and go to state 6
-    extern_decl                    shift and go to state 7
-    function_call                  shift and go to state 14
 
 state 57
 
-    (9) function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements . RBRACE
-    (2) statements -> statements . statement
-    (4) statement -> . expression
-    (5) statement -> . NAME ASSIGN expression
-    (6) statement -> . function_def
-    (7) statement -> . extern_decl
-    (8) statement -> . RETURN expression
-    (20) expression -> . expression PLUS expression
-    (21) expression -> . expression MINUS expression
-    (22) expression -> . expression TIMES expression
-    (23) expression -> . expression DIVIDE expression
-    (24) expression -> . LPAREN expression RPAREN
-    (25) expression -> . PLUS expression
-    (26) expression -> . MINUS expression
-    (27) expression -> . NUMBER
-    (28) expression -> . NAME
-    (29) expression -> . STRING
-    (30) expression -> . function_call
-    (9) function_def -> . DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
-    (15) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN
-    (31) function_call -> . NAME LPAREN args RPAREN
+    (10) function_def -> FN NAME LPAREN params RPAREN . LBRACE statements RBRACE
 
-    RBRACE          shift and go to state 58
-    NAME            shift and go to state 5
-    RETURN          shift and go to state 8
-    LPAREN          shift and go to state 11
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    NUMBER          shift and go to state 12
-    STRING          shift and go to state 13
-    DEF             shift and go to state 15
-    EXTERN          shift and go to state 16
+    LBRACE          shift and go to state 61
 
-    statement                      shift and go to state 17
-    expression                     shift and go to state 4
-    function_def                   shift and go to state 6
-    extern_decl                    shift and go to state 7
-    function_call                  shift and go to state 14
 
 state 58
 
-    (9) function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .
+    (11) params -> params COMMA . NAME
 
-    NAME            reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    RETURN          reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    LPAREN          reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    PLUS            reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    MINUS           reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    NUMBER          reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    STRING          reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    DEF             reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    EXTERN          reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    $end            reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
-    RBRACE          reduce using rule 9 (function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE .)
+    NAME            shift and go to state 62
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for PLUS in state 4 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 4 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 5 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 24 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 24 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 25 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 35 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 35 resolved as shift
+
+state 59
+
+    (14) extern_decl -> EXTERN NAME LPAREN extern_params RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 63
+
+
+state 60
+
+    (15) extern_params -> extern_params COMMA . extern_type
+    (18) extern_type -> . NAME
+
+    NAME            shift and go to state 52
+
+    extern_type                    shift and go to state 64
+
+state 61
+
+    (10) function_def -> FN NAME LPAREN params RPAREN LBRACE . statements RBRACE
+    (2) statements -> . statements statement
+    (3) statements -> . statement
+    (4) statement -> . expression SEMICOLON
+    (5) statement -> . VAR NAME ASSIGN expression SEMICOLON
+    (6) statement -> . NAME ASSIGN expression SEMICOLON
+    (7) statement -> . function_def
+    (8) statement -> . extern_decl
+    (9) statement -> . RETURN expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (10) function_def -> . FN NAME LPAREN params RPAREN LBRACE statements RBRACE
+    (14) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN SEMICOLON
+    (30) function_call -> . NAME LPAREN args RPAREN
+
+    VAR             shift and go to state 5
+    NAME            shift and go to state 6
+    RETURN          shift and go to state 9
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    STRING          shift and go to state 14
+    FN              shift and go to state 16
+    EXTERN          shift and go to state 17
+
+    statements                     shift and go to state 65
+    statement                      shift and go to state 3
+    expression                     shift and go to state 4
+    function_def                   shift and go to state 7
+    extern_decl                    shift and go to state 8
+    function_call                  shift and go to state 15
+
+state 62
+
+    (11) params -> params COMMA NAME .
+
+    RPAREN          reduce using rule 11 (params -> params COMMA NAME .)
+    COMMA           reduce using rule 11 (params -> params COMMA NAME .)
+
+
+state 63
+
+    (14) extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .
+
+    VAR             reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    NAME            reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    RETURN          reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    LPAREN          reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    PLUS            reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    MINUS           reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    NUMBER          reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    STRING          reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    FN              reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    EXTERN          reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    $end            reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+    RBRACE          reduce using rule 14 (extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON .)
+
+
+state 64
+
+    (15) extern_params -> extern_params COMMA extern_type .
+
+    RPAREN          reduce using rule 15 (extern_params -> extern_params COMMA extern_type .)
+    COMMA           reduce using rule 15 (extern_params -> extern_params COMMA extern_type .)
+
+
+state 65
+
+    (10) function_def -> FN NAME LPAREN params RPAREN LBRACE statements . RBRACE
+    (2) statements -> statements . statement
+    (4) statement -> . expression SEMICOLON
+    (5) statement -> . VAR NAME ASSIGN expression SEMICOLON
+    (6) statement -> . NAME ASSIGN expression SEMICOLON
+    (7) statement -> . function_def
+    (8) statement -> . extern_decl
+    (9) statement -> . RETURN expression SEMICOLON
+    (19) expression -> . expression PLUS expression
+    (20) expression -> . expression MINUS expression
+    (21) expression -> . expression TIMES expression
+    (22) expression -> . expression DIVIDE expression
+    (23) expression -> . LPAREN expression RPAREN
+    (24) expression -> . PLUS expression
+    (25) expression -> . MINUS expression
+    (26) expression -> . NUMBER
+    (27) expression -> . NAME
+    (28) expression -> . STRING
+    (29) expression -> . function_call
+    (10) function_def -> . FN NAME LPAREN params RPAREN LBRACE statements RBRACE
+    (14) extern_decl -> . EXTERN NAME LPAREN extern_params RPAREN SEMICOLON
+    (30) function_call -> . NAME LPAREN args RPAREN
+
+    RBRACE          shift and go to state 66
+    VAR             shift and go to state 5
+    NAME            shift and go to state 6
+    RETURN          shift and go to state 9
+    LPAREN          shift and go to state 12
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NUMBER          shift and go to state 13
+    STRING          shift and go to state 14
+    FN              shift and go to state 16
+    EXTERN          shift and go to state 17
+
+    statement                      shift and go to state 18
+    expression                     shift and go to state 4
+    function_def                   shift and go to state 7
+    extern_decl                    shift and go to state 8
+    function_call                  shift and go to state 15
+
+state 66
+
+    (10) function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .
+
+    VAR             reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    NAME            reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    RETURN          reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    LPAREN          reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    PLUS            reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    MINUS           reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    NUMBER          reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    STRING          reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    FN              reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    EXTERN          reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    $end            reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+    RBRACE          reduce using rule 10 (function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE .)
+

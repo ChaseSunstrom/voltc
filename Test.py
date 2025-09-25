@@ -9,7 +9,7 @@ from llvmlite import ir, binding
 
 tokens = (
     'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE',
-    'NAME', 'NUMBER', 'ASSIGN', 'DEF', 'COLON', 'COMMA', 'EXTERN', 'STRING', 'RETURN', 'SEMICOLON'
+    'NAME', 'NUMBER', 'ASSIGN', 'FN', 'COLON', 'COMMA', 'EXTERN', 'STRING', 'RETURN', 'SEMICOLON', 'VAR'
 )
 
 t_ignore = ' \t'
@@ -28,6 +28,10 @@ t_COMMA = r','
 
 def t_FN(t):
     r'fn'
+    return t
+
+def t_VAR(t):
+    r'var'
     return t
 
 def t_EXTERN(t):
@@ -62,11 +66,14 @@ lexer = lex()
 
 # --- Parser
 
+# --- Precedence (keep this near the parser functions)
 precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
     ('right', 'UMINUS', 'UPLUS'),
 )
+
+# --- Grammar rules
 
 def p_program(p):
     '''
@@ -86,15 +93,21 @@ def p_statements_single(p):
     '''
     p[0] = [p[1]]
 
-def p_statement_expr(p):
+def p_statement_expr_stmt(p):
     '''
     statement : expression SEMICOLON
     '''
     p[0] = ('expr', p[1])
 
+def p_statement_vardecl(p):
+    '''
+    statement : VAR NAME ASSIGN expression SEMICOLON
+    '''
+    p[0] = ('vardecl', p[2], p[4])
+
 def p_statement_assign(p):
     '''
-    statement : NAME ASSIGN expression
+    statement : NAME ASSIGN expression SEMICOLON
     '''
     p[0] = ('assign', p[1], p[3])
 
@@ -112,27 +125,15 @@ def p_statement_extern(p):
 
 def p_statement_return(p):
     '''
-    statement : RETURN expression
+    statement : RETURN expression SEMICOLON
     '''
     p[0] = ('return', p[2])
 
 def p_function_def(p):
     '''
-    function_def : DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE
+    function_def : FN NAME LPAREN params RPAREN LBRACE statements RBRACE
     '''
-    p[0] = ('funcdef', p[2], p[4], p[8])
-
-def p_block_multi(p):
-    '''
-    block : block statement
-    '''
-    p[0] = p[1] + [p[2]]
-
-def p_block_single(p):
-    '''
-    block : statement
-    '''
-    p[0] = [p[1]]
+    p[0] = ('funcdef', p[2], p[4], p[7])
 
 def p_params_multi(p):
     '''
@@ -154,7 +155,7 @@ def p_params_empty(p):
 
 def p_extern_decl(p):
     '''
-    extern_decl : EXTERN NAME LPAREN extern_params RPAREN
+    extern_decl : EXTERN NAME LPAREN extern_params RPAREN SEMICOLON
     '''
     p[0] = ('extern', p[2], p[4])
 
@@ -254,9 +255,10 @@ def p_args_empty(p):
 
 def p_error(p):
     if p:
-        print(f'Syntax error at {p.value!r}')
+        print(f"Syntax error at {p.value!r}")
     else:
-        print('Syntax error at EOF')
+        print("Syntax error at EOF")
+
 
 parser = yacc()
 
@@ -289,10 +291,19 @@ def codegen(ast, ctx):
         return last_val
     elif node_type == 'expr':
         return codegen(ast[1], ctx)
-    elif node_type == 'assign':
-        val = codegen(ast[2], ctx)
-        ctx.named_values[ast[1]] = val
+    elif node_type == 'vardecl':
+        name, expr = ast[1], ast[2]
+        val = codegen(expr, ctx)
+        ctx.named_values[name] = val
         return val
+
+    elif node_type == 'assign':
+        name, expr = ast[1], ast[2]
+        val = codegen(expr, ctx)
+        # (optionally: check that name already exists to forbid implicit decls)
+        ctx.named_values[name] = val
+        return val
+
     elif node_type == 'funcdef':
         name, params, body = ast[1], ast[2], ast[3]
 
@@ -347,9 +358,9 @@ def codegen(ast, ctx):
     elif node_type == 'number':
         return ir.Constant(ir.IntType(32), ast[1])
     elif node_type == 'name':
-        if ast[1] not in ctx.named_values:
-            raise NameError(f"Undefined variable: {ast[1]}")
-        return ctx.named_values[ast[1]]
+        v = ctx.named_values.get(ast[1])
+        return v if v is not None else ir.Constant(ir.IntType(32), 0)
+
 
     elif node_type == 'string':
         s = ast[1]
@@ -387,7 +398,99 @@ def codegen(ast, ctx):
     else:
         raise ValueError(f"Unknown AST node: {node_type}")
 
+def semantic_analyze(ast):
+    errors = []
+    functions = {}  # name -> arity
+    externs = {}    # name -> arity (min; printf is variadic)
+    globals_scope = set()
+
+    def check_expr(expr, scope):
+        t = expr[0]
+        if t == 'number' or t == 'string':
+            return
+        if t == 'name':
+            name = expr[1]
+            if name not in scope:
+                errors.append(f"Use of undeclared variable '{name}'.")
+        elif t == 'binop':
+            check_expr(expr[2], scope)
+            check_expr(expr[3], scope)
+        elif t == 'unary':
+            check_expr(expr[2], scope)
+        elif t == 'grouped':
+            check_expr(expr[1], scope)
+        elif t == 'funccall':
+            fname, args = expr[1], expr[2]
+            # known?
+            if fname not in functions and fname not in externs:
+                errors.append(f"Call to undefined function '{fname}'.")
+            else:
+                arity = functions.get(fname, externs.get(fname))
+                if fname != 'printf' and len(args) != arity:
+                    errors.append(f"Function '{fname}' expects {arity} arg(s), got {len(args)}.")
+            for a in args:
+                check_expr(a, scope)
+        else:
+            # expr or others
+            pass
+
+    def check_stmt(stmt, scope):
+        t = stmt[0]
+        if t == 'vardecl':
+            name, expr = stmt[1], stmt[2]
+            if name in scope:
+                errors.append(f"Redeclaration of variable '{name}'.")
+            scope.add(name)
+            check_expr(expr, scope)
+        elif t == 'assign':
+            name, expr = stmt[1], stmt[2]
+            if name not in scope:
+                errors.append(f"Assignment to undeclared variable '{name}'.")
+            check_expr(expr, scope)
+        elif t == 'expr':
+            check_expr(stmt[1], scope)
+        elif t == 'extern':
+            # record extern arity (printf handled as variadic)
+            name, params = stmt[1], stmt[2]
+            externs[name] = len(params)
+        elif t == 'funcdef':
+            pass  # handled in first pass
+        elif t == 'return':
+            check_expr(stmt[1], scope)
+
+    # First pass: collect function signatures and detect duplicates
+    for item in ast[1]:
+        if item[0] == 'funcdef':
+            fname, params = item[1], item[2]
+            if fname in functions:
+                errors.append(f"Redefinition of function '{fname}'.")
+            else:
+                functions[fname] = len(params)
+        elif item[0] == 'extern':
+            externs[item[1]] = len(item[2])
+
+    # Second pass: check top-level and function bodies
+    # top-level scope: allow var decls
+    top_scope = set()
+    for item in ast[1]:
+        if item[0] == 'funcdef':
+            _, fname, params, body = item
+            # function-local scope seeded with params
+            fscope = set(params)
+            for st in body:
+                check_stmt(st, fscope)
+        else:
+            check_stmt(item, top_scope)
+
+    return errors
+
+
 def compile_ast_to_binary(ast):
+    errs = semantic_analyze(ast)
+    if errs:
+        print("Semantic errors:\n  - " + "\n  - ".join(errs))
+        return  # don't generate IR / object files
+
     module = ir.Module(name="calc_module")
     func_type = ir.FunctionType(ir.IntType(32), [])
     func = ir.Function(module, func_type, name="main")
@@ -449,12 +552,12 @@ def compile_ast_to_binary(ast):
 # --- Example usage ---
 
 source_code = """
-extern printf(charptr)
-def add(a, b, c, d): { return a + b + c + d }
-x = 2 * 3
-y = add(x, 4, 8, 10)
-
-printf("%d\n", y + 1)
+extern printf(charptr);
+fn add(a, b, c, d) { return a + b + c + d; }
+var x = 2 * 3;
+var y = add(x, 4, 8, 10);
+y = 10 / 2;
+printf("%d\n", y + 1);
 
 """
 

@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDErightUMINUSUPLUSASSIGN COLON COMMA DEF DIVIDE EXTERN LBRACE LPAREN MINUS NAME NUMBER PLUS RBRACE RETURN RPAREN STRING TIMES\n    program : statements\n    \n    statements : statements statement\n    \n    statements : statement\n    \n    statement : expression\n    \n    statement : NAME ASSIGN expression\n    \n    statement : function_def\n    \n    statement : extern_decl\n    \n    statement : RETURN expression\n    \n    function_def : DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE\n    \n    block : block statement\n    \n    block : statement\n    \n    params : params COMMA NAME\n    \n    params : NAME\n    \n    params :\n    \n    extern_decl : EXTERN NAME LPAREN extern_params RPAREN\n    \n    extern_params : extern_params COMMA extern_type\n    \n    extern_params : extern_type\n    \n    extern_params :\n    \n    extern_type : NAME\n    \n    expression : expression PLUS expression\n               | expression MINUS expression\n               | expression TIMES expression\n               | expression DIVIDE expression\n    \n    expression : LPAREN expression RPAREN\n    \n    expression : PLUS expression %prec UPLUS\n               | MINUS expression %prec UMINUS\n    \n    expression : NUMBER\n    \n    expression : NAME\n    \n    expression : STRING\n    \n    expression : function_call\n    \n    function_call : NAME LPAREN args RPAREN\n    \n    args : args COMMA expression\n    \n    args : expression\n    \n    args :\n    '
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDErightUMINUSUPLUSASSIGN COLON COMMA DIVIDE EXTERN FN LBRACE LPAREN MINUS NAME NUMBER PLUS RBRACE RETURN RPAREN SEMICOLON STRING TIMES VAR\n    program : statements\n    \n    statements : statements statement\n    \n    statements : statement\n    \n    statement : expression SEMICOLON\n    \n    statement : VAR NAME ASSIGN expression SEMICOLON\n    \n    statement : NAME ASSIGN expression SEMICOLON\n    \n    statement : function_def\n    \n    statement : extern_decl\n    \n    statement : RETURN expression SEMICOLON\n    \n    function_def : FN NAME LPAREN params RPAREN LBRACE statements RBRACE\n    \n    params : params COMMA NAME\n    \n    params : NAME\n    \n    params :\n    \n    extern_decl : EXTERN NAME LPAREN extern_params RPAREN SEMICOLON\n    \n    extern_params : extern_params COMMA extern_type\n    \n    extern_params : extern_type\n    \n    extern_params :\n    \n    extern_type : NAME\n    \n    expression : expression PLUS expression\n               | expression MINUS expression\n               | expression TIMES expression\n               | expression DIVIDE expression\n    \n    expression : LPAREN expression RPAREN\n    \n    expression : PLUS expression %prec UPLUS\n               | MINUS expression %prec UMINUS\n    \n    expression : NUMBER\n    \n    expression : NAME\n    \n    expression : STRING\n    \n    expression : function_call\n    \n    function_call : NAME LPAREN args RPAREN\n    \n    args : args COMMA expression\n    \n    args : expression\n    \n    args :\n    '
     
-_lr_action_items = {'NAME':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,31,32,33,34,35,38,39,40,41,42,50,51,52,56,57,58,],[5,5,-3,-4,-28,-6,-7,25,25,25,25,-27,-29,-30,29,30,-2,25,25,25,25,25,25,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,43,45,-31,25,54,-15,45,5,5,-9,]),'RETURN':([0,2,3,4,5,6,7,12,13,14,17,24,25,26,27,31,32,33,34,35,38,41,51,56,57,58,],[8,8,-3,-4,-28,-6,-7,-27,-29,-30,-2,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,-15,8,8,-9,]),'LPAREN':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35,38,41,42,51,56,57,58,],[11,11,-3,-4,23,-6,-7,11,11,11,11,-27,-29,-30,-2,11,11,11,11,11,11,-8,23,-25,-26,39,40,-20,-21,-22,-23,-5,-24,-31,11,-15,11,11,-9,]),'PLUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24,25,26,27,28,31,32,33,34,35,37,38,41,42,48,51,56,57,58,],[9,9,-3,18,-28,-6,-7,9,9,9,9,-27,-29,-30,-2,9,9,9,9,9,9,18,-28,-25,-26,18,-20,-21,-22,-23,18,18,-24,-31,9,18,-15,9,9,-9,]),'MINUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24,25,26,27,28,31,32,33,34,35,37,38,41,42,48,51,56,57,58,],[10,10,-3,19,-28,-6,-7,10,10,10,10,-27,-29,-30,-2,10,10,10,10,10,10,19,-28,-25,-26,19,-20,-21,-22,-23,19,19,-24,-31,10,19,-15,10,10,-9,]),'NUMBER':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24,25,26,27,31,32,33,34,35,38,41,42,51,56,57,58,],[12,12,-3,-4,-28,-6,-7,12,12,12,12,-27,-29,-30,-2,12,12,12,12,12,12,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,12,-15,12,12,-9,]),'STRING':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24,25,26,27,31,32,33,34,35,38,41,42,51,56,57,58,],[13,13,-3,-4,-28,-6,-7,13,13,13,13,-27,-29,-30,-2,13,13,13,13,13,13,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,13,-15,13,13,-9,]),'DEF':([0,2,3,4,5,6,7,12,13,14,17,24,25,26,27,31,32,33,34,35,38,41,51,56,57,58,],[15,15,-3,-4,-28,-6,-7,-27,-29,-30,-2,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,-15,15,15,-9,]),'EXTERN':([0,2,3,4,5,6,7,12,13,14,17,24,25,26,27,31,32,33,34,35,38,41,51,56,57,58,],[16,16,-3,-4,-28,-6,-7,-27,-29,-30,-2,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,-15,16,16,-9,]),'$end':([1,2,3,4,5,6,7,12,13,14,17,24,25,26,27,31,32,33,34,35,38,41,51,58,],[0,-1,-3,-4,-28,-6,-7,-27,-29,-30,-2,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,-15,-9,]),'RBRACE':([3,4,5,6,7,12,13,14,17,24,25,26,27,31,32,33,34,35,38,41,51,57,58,],[-3,-4,-28,-6,-7,-27,-29,-30,-2,-8,-28,-25,-26,-20,-21,-22,-23,-5,-24,-31,-15,58,-9,]),'TIMES':([4,5,12,13,14,24,25,26,27,28,31,32,33,34,35,37,38,41,48,],[20,-28,-27,-29,-30,20,-28,-25,-26,20,20,20,-22,-23,20,20,-24,-31,20,]),'DIVIDE':([4,5,12,13,14,24,25,26,27,28,31,32,33,34,35,37,38,41,48,],[21,-28,-27,-29,-30,21,-28,-25,-26,21,21,21,-22,-23,21,21,-24,-31,21,]),'ASSIGN':([5,],[22,]),'RPAREN':([12,13,14,23,25,26,27,28,31,32,33,34,36,37,38,39,40,41,43,44,45,46,47,48,54,55,],[-27,-29,-30,-34,-28,-25,-26,38,-20,-21,-22,-23,41,-33,-24,-14,-18,-31,-13,49,-19,51,-17,-32,-12,-16,]),'COMMA':([12,13,14,23,25,26,27,31,32,33,34,36,37,38,39,40,41,43,44,45,46,47,48,54,55,],[-27,-29,-30,-34,-28,-25,-26,-20,-21,-22,-23,42,-33,-24,-14,-18,-31,-13,50,-19,52,-17,-32,-12,-16,]),'COLON':([49,],[53,]),'LBRACE':([53,],[56,]),}
+_lr_action_items = {'VAR':([0,2,3,7,8,18,19,42,47,55,61,63,65,66,],[5,5,-3,-7,-8,-2,-4,-9,-6,-5,5,-14,5,-10,]),'NAME':([0,2,3,5,7,8,9,10,11,12,16,17,18,19,20,21,22,23,25,26,38,42,44,45,47,49,55,58,60,61,63,65,66,],[6,6,-3,24,-7,-8,28,28,28,28,32,33,-2,-4,28,28,28,28,28,28,28,-9,50,52,-6,28,-5,62,52,6,-14,6,-10,]),'RETURN':([0,2,3,7,8,18,19,42,47,55,61,63,65,66,],[9,9,-3,-7,-8,-2,-4,-9,-6,-5,9,-14,9,-10,]),'LPAREN':([0,2,3,6,7,8,9,10,11,12,18,19,20,21,22,23,25,26,28,32,33,38,42,47,49,55,61,63,65,66,],[12,12,-3,26,-7,-8,12,12,12,12,-2,-4,12,12,12,12,12,12,26,44,45,12,-9,-6,12,-5,12,-14,12,-10,]),'PLUS':([0,2,3,4,6,7,8,9,10,11,12,13,14,15,18,19,20,21,22,23,25,26,27,28,29,30,31,34,35,36,37,38,39,41,42,43,46,47,48,49,55,56,61,63,65,66,],[10,10,-3,20,-27,-7,-8,10,10,10,10,-26,-28,-29,-2,-4,10,10,10,10,10,10,20,-27,-24,-25,20,-19,-20,-21,-22,10,20,20,-9,-23,20,-6,-30,10,-5,20,10,-14,10,-10,]),'MINUS':([0,2,3,4,6,7,8,9,10,11,12,13,14,15,18,19,20,21,22,23,25,26,27,28,29,30,31,34,35,36,37,38,39,41,42,43,46,47,48,49,55,56,61,63,65,66,],[11,11,-3,21,-27,-7,-8,11,11,11,11,-26,-28,-29,-2,-4,11,11,11,11,11,11,21,-27,-24,-25,21,-19,-20,-21,-22,11,21,21,-9,-23,21,-6,-30,11,-5,21,11,-14,11,-10,]),'NUMBER':([0,2,3,7,8,9,10,11,12,18,19,20,21,22,23,25,26,38,42,47,49,55,61,63,65,66,],[13,13,-3,-7,-8,13,13,13,13,-2,-4,13,13,13,13,13,13,13,-9,-6,13,-5,13,-14,13,-10,]),'STRING':([0,2,3,7,8,9,10,11,12,18,19,20,21,22,23,25,26,38,42,47,49,55,61,63,65,66,],[14,14,-3,-7,-8,14,14,14,14,-2,-4,14,14,14,14,14,14,14,-9,-6,14,-5,14,-14,14,-10,]),'FN':([0,2,3,7,8,18,19,42,47,55,61,63,65,66,],[16,16,-3,-7,-8,-2,-4,-9,-6,-5,16,-14,16,-10,]),'EXTERN':([0,2,3,7,8,18,19,42,47,55,61,63,65,66,],[17,17,-3,-7,-8,-2,-4,-9,-6,-5,17,-14,17,-10,]),'$end':([1,2,3,7,8,18,19,42,47,55,63,66,],[0,-1,-3,-7,-8,-2,-4,-9,-6,-5,-14,-10,]),'RBRACE':([3,7,8,18,19,42,47,55,63,65,66,],[-3,-7,-8,-2,-4,-9,-6,-5,-14,66,-10,]),'SEMICOLON':([4,6,13,14,15,27,28,29,30,34,35,36,37,39,43,46,48,59,],[19,-27,-26,-28,-29,42,-27,-24,-25,-19,-20,-21,-22,47,-23,55,-30,63,]),'TIMES':([4,6,13,14,15,27,28,29,30,31,34,35,36,37,39,41,43,46,48,56,],[22,-27,-26,-28,-29,22,-27,-24,-25,22,22,22,-21,-22,22,22,-23,22,-30,22,]),'DIVIDE':([4,6,13,14,15,27,28,29,30,31,34,35,36,37,39,41,43,46,48,56,],[23,-27,-26,-28,-29,23,-27,-24,-25,23,23,23,-21,-22,23,23,-23,23,-30,23,]),'ASSIGN':([6,24,],[25,38,]),'RPAREN':([13,14,15,26,28,29,30,31,34,35,36,37,40,41,43,44,45,48,50,51,52,53,54,56,62,64,],[-26,-28,-29,-33,-27,-24,-25,43,-19,-20,-21,-22,48,-32,-23,-13,-17,-30,-12,57,-18,59,-16,-31,-11,-15,]),'COMMA':([13,14,15,26,28,29,30,34,35,36,37,40,41,43,44,45,48,50,51,52,53,54,56,62,64,],[-26,-28,-29,-33,-27,-24,-25,-19,-20,-21,-22,49,-32,-23,-13,-17,-30,-12,58,-18,60,-16,-31,-11,-15,]),'LBRACE':([57,],[61,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'statements':([0,56,],[2,57,]),'statement':([0,2,56,57,],[3,17,3,17,]),'expression':([0,2,8,9,10,11,18,19,20,21,22,23,42,56,57,],[4,4,24,26,27,28,31,32,33,34,35,37,48,4,4,]),'function_def':([0,2,56,57,],[6,6,6,6,]),'extern_decl':([0,2,56,57,],[7,7,7,7,]),'function_call':([0,2,8,9,10,11,18,19,20,21,22,23,42,56,57,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'args':([23,],[36,]),'params':([39,],[44,]),'extern_params':([40,],[46,]),'extern_type':([40,52,],[47,55,]),}
+_lr_goto_items = {'program':([0,],[1,]),'statements':([0,61,],[2,65,]),'statement':([0,2,61,65,],[3,18,3,18,]),'expression':([0,2,9,10,11,12,20,21,22,23,25,26,38,49,61,65,],[4,4,27,29,30,31,34,35,36,37,39,41,46,56,4,4,]),'function_def':([0,2,61,65,],[7,7,7,7,]),'extern_decl':([0,2,61,65,],[8,8,8,8,]),'function_call':([0,2,9,10,11,12,20,21,22,23,25,26,38,49,61,65,],[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,]),'args':([26,],[40,]),'params':([44,],[51,]),'extern_params':([45,],[53,]),'extern_type':([45,60,],[54,64,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,38 +27,37 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> statements','program',1,'p_program','Test.py',72),
-  ('statements -> statements statement','statements',2,'p_statements_multi','Test.py',78),
-  ('statements -> statement','statements',1,'p_statements_single','Test.py',84),
-  ('statement -> expression','statement',1,'p_statement_expr','Test.py',90),
-  ('statement -> NAME ASSIGN expression','statement',3,'p_statement_assign','Test.py',96),
-  ('statement -> function_def','statement',1,'p_statement_funcdef','Test.py',102),
-  ('statement -> extern_decl','statement',1,'p_statement_extern','Test.py',108),
-  ('statement -> RETURN expression','statement',2,'p_statement_return','Test.py',114),
-  ('function_def -> DEF NAME LPAREN params RPAREN COLON LBRACE statements RBRACE','function_def',9,'p_function_def','Test.py',120),
-  ('block -> block statement','block',2,'p_block_multi','Test.py',126),
-  ('block -> statement','block',1,'p_block_single','Test.py',132),
-  ('params -> params COMMA NAME','params',3,'p_params_multi','Test.py',138),
-  ('params -> NAME','params',1,'p_params_single','Test.py',144),
-  ('params -> <empty>','params',0,'p_params_empty','Test.py',150),
-  ('extern_decl -> EXTERN NAME LPAREN extern_params RPAREN','extern_decl',5,'p_extern_decl','Test.py',156),
-  ('extern_params -> extern_params COMMA extern_type','extern_params',3,'p_extern_params_multi','Test.py',162),
-  ('extern_params -> extern_type','extern_params',1,'p_extern_params_single','Test.py',168),
-  ('extern_params -> <empty>','extern_params',0,'p_extern_params_empty','Test.py',174),
-  ('extern_type -> NAME','extern_type',1,'p_extern_type','Test.py',180),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','Test.py',186),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','Test.py',187),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','Test.py',188),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','Test.py',189),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_grouped','Test.py',195),
-  ('expression -> PLUS expression','expression',2,'p_expression_unary','Test.py',201),
-  ('expression -> MINUS expression','expression',2,'p_expression_unary','Test.py',202),
-  ('expression -> NUMBER','expression',1,'p_expression_number','Test.py',208),
-  ('expression -> NAME','expression',1,'p_expression_name','Test.py',214),
-  ('expression -> STRING','expression',1,'p_expression_string','Test.py',220),
-  ('expression -> function_call','expression',1,'p_expression_func_call','Test.py',226),
-  ('function_call -> NAME LPAREN args RPAREN','function_call',4,'p_function_call','Test.py',232),
-  ('args -> args COMMA expression','args',3,'p_args_multi','Test.py',238),
-  ('args -> expression','args',1,'p_args_single','Test.py',244),
-  ('args -> <empty>','args',0,'p_args_empty','Test.py',250),
+  ('program -> statements','program',1,'p_program','Test.py',80),
+  ('statements -> statements statement','statements',2,'p_statements_multi','Test.py',86),
+  ('statements -> statement','statements',1,'p_statements_single','Test.py',92),
+  ('statement -> expression SEMICOLON','statement',2,'p_statement_expr_stmt','Test.py',98),
+  ('statement -> VAR NAME ASSIGN expression SEMICOLON','statement',5,'p_statement_vardecl','Test.py',104),
+  ('statement -> NAME ASSIGN expression SEMICOLON','statement',4,'p_statement_assign','Test.py',110),
+  ('statement -> function_def','statement',1,'p_statement_funcdef','Test.py',116),
+  ('statement -> extern_decl','statement',1,'p_statement_extern','Test.py',122),
+  ('statement -> RETURN expression SEMICOLON','statement',3,'p_statement_return','Test.py',128),
+  ('function_def -> FN NAME LPAREN params RPAREN LBRACE statements RBRACE','function_def',8,'p_function_def','Test.py',134),
+  ('params -> params COMMA NAME','params',3,'p_params_multi','Test.py',140),
+  ('params -> NAME','params',1,'p_params_single','Test.py',146),
+  ('params -> <empty>','params',0,'p_params_empty','Test.py',152),
+  ('extern_decl -> EXTERN NAME LPAREN extern_params RPAREN SEMICOLON','extern_decl',6,'p_extern_decl','Test.py',158),
+  ('extern_params -> extern_params COMMA extern_type','extern_params',3,'p_extern_params_multi','Test.py',164),
+  ('extern_params -> extern_type','extern_params',1,'p_extern_params_single','Test.py',170),
+  ('extern_params -> <empty>','extern_params',0,'p_extern_params_empty','Test.py',176),
+  ('extern_type -> NAME','extern_type',1,'p_extern_type','Test.py',182),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','Test.py',188),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','Test.py',189),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','Test.py',190),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','Test.py',191),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_grouped','Test.py',197),
+  ('expression -> PLUS expression','expression',2,'p_expression_unary','Test.py',203),
+  ('expression -> MINUS expression','expression',2,'p_expression_unary','Test.py',204),
+  ('expression -> NUMBER','expression',1,'p_expression_number','Test.py',210),
+  ('expression -> NAME','expression',1,'p_expression_name','Test.py',216),
+  ('expression -> STRING','expression',1,'p_expression_string','Test.py',222),
+  ('expression -> function_call','expression',1,'p_expression_func_call','Test.py',228),
+  ('function_call -> NAME LPAREN args RPAREN','function_call',4,'p_function_call','Test.py',234),
+  ('args -> args COMMA expression','args',3,'p_args_multi','Test.py',240),
+  ('args -> expression','args',1,'p_args_single','Test.py',246),
+  ('args -> <empty>','args',0,'p_args_empty','Test.py',252),
 ]
