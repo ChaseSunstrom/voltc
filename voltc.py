@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os, sys, io, shutil, subprocess, textwrap
+import platform
+import shlex
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Tuple, Union
+from typing import List, Dict, Optional, Tuple, Union, Set
 
 from ply.lex import lex
 from ply.yacc import yacc
@@ -1275,6 +1277,215 @@ def build_modules(paths: List[str], es: ErrorSink) -> Dict[str, Module]:
         mods[m.name] = m
     return mods
 
+
+@dataclass
+class Toolchain:
+    cc: List[str]
+    triple: str
+    obj_ext: str
+    link_args: List[str] = field(default_factory=list)
+    description: str = ""
+
+
+def _quote_cmd(parts: List[str]) -> str:
+    return " ".join(shlex.quote(p) for p in parts)
+
+
+def _is_windows_like_triple(triple: str) -> bool:
+    t = (triple or "").lower()
+    return any(key in t for key in ("windows", "mingw", "msvc", "cygwin"))
+
+
+def _arch_from_triple(triple: str) -> str:
+    if not triple:
+        return platform.machine() or ""
+    return triple.split("-")[0]
+
+
+def _arch_tokens(arch: str) -> List[str]:
+    arch = arch.lower()
+    aliases = {arch}
+    mapping = {
+        "x86_64": {"x86_64", "amd64"},
+        "amd64": {"x86_64", "amd64"},
+        "aarch64": {"aarch64", "arm64"},
+        "arm64": {"aarch64", "arm64"},
+        "i686": {"i686", "x86"},
+        "i386": {"i686", "x86"},
+    }
+    aliases.update(mapping.get(arch, {arch}))
+    return list(aliases)
+
+
+def _clang_runtime_libs(clang_path: str, triple: str) -> List[str]:
+    arch = _arch_from_triple(triple) or platform.machine()
+    if not arch:
+        return []
+    arch_tokens = _arch_tokens(arch)
+    try:
+        runtime_dir = subprocess.check_output(
+            [clang_path, "--print-runtime-dir"],
+            text=True,
+            stderr=subprocess.STDOUT,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return []
+
+    search_roots = {runtime_dir}
+    # Common layouts add per-platform subdirectories
+    search_roots.add(os.path.join(runtime_dir, "windows"))
+    search_roots.add(os.path.join(runtime_dir, "mingw"))
+
+    libs: List[str] = []
+    for root in search_roots:
+        if not os.path.isdir(root):
+            continue
+        for name in os.listdir(root):
+            lower = name.lower()
+            if "builtins" not in lower:
+                continue
+            if not any(tok in lower for tok in arch_tokens):
+                continue
+            if not (name.endswith(".a") or name.endswith(".lib")):
+                continue
+            libs.append(os.path.join(root, name))
+        if libs:
+            break
+    return libs
+
+
+def _windows_linker_flags(cc_path: str, triple: str) -> List[str]:
+    compiler = os.path.basename(cc_path).lower()
+    flags: List[str] = []
+    if "clang" in compiler:
+        flags.extend(_clang_runtime_libs(cc_path, triple))
+    elif compiler == "gcc" or compiler.endswith("gcc.exe"):
+        # mingw gcc typically handles runtime automatically
+        pass
+    return flags
+
+
+def _probe_compiler(cc_cmd: List[str], default_triple: str) -> Optional[Toolchain]:
+    exe = os.path.basename(cc_cmd[0]).lower()
+    if exe in {"cl", "clang-cl", "link", "lld-link"}:
+        return None
+
+    triple = default_triple
+    try:
+        proc = subprocess.run(
+            cc_cmd + ["-dumpmachine"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if proc.returncode == 0:
+            out = proc.stdout.strip() or proc.stderr.strip()
+            if out:
+                triple = out.splitlines()[0]
+    except FileNotFoundError:
+        return None
+    except OSError:
+        return None
+
+    obj_ext = ".obj" if _is_windows_like_triple(triple) else ".o"
+    link_args: List[str] = []
+    if _is_windows_like_triple(triple):
+        link_args.extend(_windows_linker_flags(cc_cmd[0], triple))
+
+    desc = _quote_cmd(cc_cmd)
+    return Toolchain(cc=list(cc_cmd), triple=triple, obj_ext=obj_ext, link_args=link_args, description=desc)
+
+
+def _gather_cc_candidates() -> List[List[str]]:
+    candidates: List[List[str]] = []
+    env_cc = os.environ.get("VOLTC_CC") or os.environ.get("CC")
+    if env_cc:
+        candidates.append(shlex.split(env_cc))
+
+    names = ["clang", "gcc", "cc", "clang++", "g++"]
+    seen: Set[str] = set()
+    for name in names:
+        path = shutil.which(name)
+        if not path:
+            continue
+        key = os.path.normcase(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append([path])
+
+    return candidates
+
+
+def detect_toolchain(default_triple: str) -> Toolchain:
+    candidates = _gather_cc_candidates()
+    if not candidates:
+        raise RuntimeError("no C compiler found; install clang/gcc or set VOLTC_CC")
+
+    errors: List[str] = []
+    for cc_cmd in candidates:
+        info = _probe_compiler(cc_cmd, default_triple)
+        if info:
+            print(f"Using host compiler: {info.description} (triple {info.triple})")
+            return info
+        errors.append(_quote_cmd(cc_cmd))
+
+    detail = ", ".join(errors) if errors else "<none>"
+    raise RuntimeError(f"unable to detect usable C compiler (tried: {detail})")
+
+
+def run_linker(obj_path: str, output: str, toolchain: Toolchain):
+    base_cmd = list(toolchain.cc)
+    base_cmd.extend([obj_path, "-o", output])
+
+    variants: List[List[str]] = []
+    seen_variants: Set[Tuple[str, ...]] = set()
+
+    def add_variant(extra: List[str]):
+        cmd = base_cmd + extra
+        key = tuple(cmd)
+        if key in seen_variants:
+            return
+        seen_variants.add(key)
+        variants.append(cmd)
+
+    add_variant(toolchain.link_args)
+
+    crt_libs = [
+        # CRT + libgcc wrappers replicated from clang --### output for MinGW
+        "-lc", "-lmingw32", "-lgcc", "-lgcc_eh", "-lmoldname",
+        "-lmingwex", "-lmsvcrt", "-lpthread", "-ladvapi32",
+        "-lshell32", "-luser32", "-lkernel32",
+    ]
+
+    add_variant(toolchain.link_args + crt_libs)
+
+    if _is_windows_like_triple(toolchain.triple):
+        # Provide a couple of fallbacks for MinGW-based setups.
+        mingw_fallback = toolchain.link_args + [
+            "-lmingw32", "-lgcc", "-lgcc_eh", "-lmingwex", "-lmsvcrt",
+            "-lkernel32", "-luser32",
+        ]
+        add_variant(mingw_fallback)
+
+        msvc_fallback = toolchain.link_args + [
+            "-lmsvcrt", "-lkernel32", "-luser32",
+        ]
+        add_variant(msvc_fallback)
+
+    last_error: Optional[subprocess.CalledProcessError] = None
+    for cmd in variants:
+        print(f"Linking with: {_quote_cmd(cmd)}")
+        try:
+            subprocess.check_call(cmd)
+            return
+        except subprocess.CalledProcessError as e:
+            last_error = e
+
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("linker invocation list was empty")
+
 def compile_and_link(paths: List[str], output="a.out"):
     es = ErrorSink()
     modules = build_modules(paths, es)
@@ -1301,39 +1512,59 @@ def compile_and_link(paths: List[str], output="a.out"):
     # compile to object + link
     binding.initialize_native_target()
     binding.initialize_native_asmprinter()
-    target = binding.Target.from_default_triple()
-    tm = target.create_target_machine()
+
+    # Host/toolchain triple & target
+    default_triple = binding.get_default_triple()
+
+    try:
+        toolchain = detect_toolchain(default_triple)
+    except RuntimeError as e:
+        print(f"error: {e}")
+        return 1
+
+    triple = toolchain.triple or default_triple
+    try:
+        target = binding.Target.from_triple(triple)
+    except RuntimeError:
+        print(f"warning: LLVM target for '{triple}' unavailable; falling back to '{default_triple}'")
+        triple = default_triple
+        target = binding.Target.from_triple(triple)
+
+    is_windows = _is_windows_like_triple(triple)
+    is_64bit   = any(a in triple for a in ("x86_64", "aarch64", "arm64"))
+
+    tm_opts = {}
+    # Windows COFF needs “large” to avoid 32-bit absolute refs to globals on 64-bit
+    tm_opts["codemodel"] = "large" if (is_windows and is_64bit) else "default"
+    # PIC on ELF/Mach-O; static/default on Windows
+    tm_opts["reloc"]     = "static" if is_windows else "pic"
+
+    tm = target.create_target_machine(**tm_opts)
+
+    # Make the textual IR self-describing
+    cg.module.triple = triple
+    cg.module.data_layout = str(tm.target_data)
     llvm_ir = str(cg.module)
     mod = binding.parse_assembly(llvm_ir)
     mod.verify()
     obj = tm.emit_object(mod)
 
     # write a single object (combined)
-    obj_path = "out.obj" if os.name == "nt" else "out.o"
+    obj_ext = toolchain.obj_ext.lstrip('.')
+    obj_path = f"out.{obj_ext}"
     with open(obj_path, "wb") as f:
         f.write(obj)
     print(f"Wrote {obj_path}")
 
     # link to executable
-    if os.name == "nt":
-        clang = shutil.which("clang")
-        if not clang:
-            print("error: clang not found on Windows (needed to link)")
-            return 1
-        cmd = [clang, obj_path, "-o", output]
-    else:
-        cc = shutil.which("clang") or shutil.which("gcc")
-        if not cc:
-            print("error: clang/gcc not found")
-            return 1
-        # cc will bring in libc for printf by default
-        cmd = [cc, obj_path, "-o", output]
-
     try:
-        subprocess.check_call(cmd)
+        run_linker(obj_path=obj_path, output=output, toolchain=toolchain)
     except subprocess.CalledProcessError as e:
         print(f"link failed: {e}")
         return e.returncode
+    except RuntimeError as e:
+        print(f"link failed: {e}")
+        return 1
 
     # Make sure it’s executable on Unix
     if os.name != "nt":

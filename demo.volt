@@ -11,6 +11,8 @@ fn add(a: i32, b: i32) -> i32 {
 // namespace demo
 namespace util::fmt {
     fn one() -> i32 { return 1; }
+    fn two() -> i32 { return 2; }
+    fn three() -> i32 { return 3; }
     const NL: charptr = "\n";
 }
 
@@ -20,6 +22,8 @@ fn main() -> i32 {
     var x: i32 = add(2, 3);
     var y = (x > 3) && true || false;
     printf("x=%d y=%d", x as i32, y as i32);
+    printf(util::fmt::NL);
+    printf("x=%d y=%d", x as i32 + 100, y as i32 + 100);
     printf(util::fmt::NL);
     return 0;
 }
